@@ -173,7 +173,7 @@ the Liberty embedded JMS server as follows:
 
 1.  Add the \<wasJmsServer-1.0\> element to the \<featureManager\>
     element.
-```
+```xml
         <feature>wasJmsServer-1.0</feature>
 ```
 2.  Add the \<wasJmsEndpoint\> element to define JMS endport with a
@@ -185,7 +185,7 @@ the Liberty embedded JMS server as follows:
 ```
 3.  Add \<MesagingEngine\> element to configure a message engine for the
     batch queue.
-```
+```xml
         <messagingEngine>
            <queue forceReliability="ReliablePersistent" id="batchLibertyQueue" receiveAllowed="true"/>
         </messagingEngine>
@@ -208,19 +208,19 @@ in the "Dispatcher" CICS region, then make the following changes to
 
 1.  Add the wasJmsClient-2.0 feature within the \<featureManager\>
     element to enable the dispatcher as a JMS client.
-```
+```xml
         <feature>wasJmsClient-2.0</feature>
 ```
 2.  Add the \<batchJmsDispatcher\> element to refer to a
     connectionFactory and a queue so that the dispatcher can put a
     message to a connected queue once it receives a batch request.
-```
+```xml
         <batchJmsDispatcher connectionFactoryRef="batchConnectionFactory" queueRef="batchJobSubmissionQueue"/>
 ```
 3.  Add the \<jmsConnectionFactory\> element with a jndiName of
     jms/batch/connectionFactory and with the remoteServerAddress
     property to point the JMS endpoint.
-```
+```xml
         <jmsConnectionFactory id="batchConnectionFactory" jndiName="jms/batch/connectionFactory">
            <properties.wasJms remoteServerAddress="winmvs2c.hursley.ibm.com:7280:BootstrapBasicMessaging"/>
         </jmsConnectionFactory>
@@ -228,7 +228,7 @@ in the "Dispatcher" CICS region, then make the following changes to
 4.  Add the \<jmsQueue\> element with a jndiName of
     jms/batch/jobSubmissionQueue and name a proper queueName. The
     queueName is used by the batch executor to get messages.
-```
+```xml
         <jmsQueue id="batchJobSubmissionQueue" jndiName="jms/batch/jobSubmissionQueue">
            <properties.wasJms deliveryMode="Persistent" queueName="batchLibertyQueue"/>
         </jmsQueue>
@@ -237,13 +237,13 @@ in the "Dispatcher" CICS region, then make the following changes to
     element to enable Liberty batch management functions including batch
     REST API, multi-server support and batchManager command line
     interface.
-```
+```xml
         <feature>batchManagement-1.0</feature>
 ```
 6.  Add the \<batchPersistence\> element to configure the job repository
     that resides in DB2. You need to change the schema, databaseName,
     portNumber, and serverName based on your DB2 configuration.
-```
+```xml
         <batchPersistence jobStoreRef="BatchDatabaseStore"/>
         <databaseStore dataSourceRef="batchDB" id="BatchDatabaseStore" schema="++schema++" tablePrefix=""/>
         <dataSource id="batchDB" jndiName="jdbc/batch">
@@ -261,7 +261,7 @@ in the "Dispatcher" CICS region, then make the following changes to
     For more information on securing Liberty batch, refer to topic
     [Securing the Liberty batch
     environment](http://www.ibm.com/support/knowledgecenter/en/SS7K4U_liberty/com.ibm.websphere.wlp.zseries.doc/ae/twlp_batch_securing.html).
-```
+```xml
         <basicRegistry id="basic" realm="ibm/api">
            <user name="bob" password="bobpwd"/>
            <user name="jane" password="janepwd"/>
@@ -296,17 +296,17 @@ the Liberty server and edit it as follows:
 
 1.  Define your batch application by adding the \<webApplication\>
     element with the z/OS file system location of your war file.
-```
+```xml
         <webApplication id="MyFirstCicsJavaBatchWAR" location="/your_zFS_application_directory/MyFirstCicsJavaBatchWAR.war" name="MyFirstCicsJavaBatchWAR"/>
 ```
 2.  Add the wasJmsClient-2.0 feature under the \<featureManager\>
     element to enable the executor as a JMS client.
-```
+```xml
         <feature>wasJmsClient-2.0</feature>
 ```
 3.  Add the \<batchJmsExecutor\> element to refer to an activation
     specification and a queue.
-```
+```xml
         <batchJmsExecutor activationSpecRef="batchActivationSpec" queueRef="batchRequestsQueue"/>
 ```
 4.  Add the \<jmsActivationSpec\> element to specify how to activate the
@@ -317,7 +317,7 @@ the Liberty server and edit it as follows:
     application provided in this tutorial, remember to specify your
     application name, otherwise you will receive a "JMS_QUEUED" response
     when invoking your batch application from the dispatcher.
-```
+```xml
         <jmsActivationSpec id="batchActivationSpec" maxEndpoints="5">
            <properties.wasJms destinationRef="batchRequestsQueue" destinationType="javax.jms.Queue" messageSelector="com_ibm_ws_batch_applicationName = 'MyFirstCicsJavaBatchWAR'" remoteServerAddress="winmvs2c.hursley.ibm.com:7280:BootstrapBasicMessaging">
            </properties.wasJms>
@@ -330,7 +330,7 @@ the Liberty server and edit it as follows:
     batch requests to a message queue, and then executors listen to a
     certain queue for the request. Once a request message is put onto
     the queue, the application is invoked by the executor.
-```
+```xml
         <jmsQueue id="batchRequestsQueue" jndiName="jms/batch/jobSubmissionQueue">
            <properties.wasJms deliveryMode="Persistent" queueName="batchLibertyQueue"/>
         </jmsQueue>
@@ -338,13 +338,13 @@ the Liberty server and edit it as follows:
 6.  Add the batchManagement-1.0 feature under the \<featureManager\>
     element to enable Liberty batch management functions. Here we need
     multi-server support from this feature.
-```
+```xml
         <feature>batchManagement-1.0</feature>
 ```
 7.  Add the element to configure the job repository that resides in DB2.
     You need to change the `schema/databaseName/portNumber/serverName`
     based on your DB2 configuration.
-```
+```xml
         <batchPersistence jobStoreRef="BatchDatabaseStore"/>
         <databaseStore dataSourceRef="batchDB" id="BatchDatabaseStore" schema="++schema++" tablePrefix=""/>
         <dataSource id="batchDB" jndiName="jdbc/batch">
@@ -362,7 +362,7 @@ the Liberty server and edit it as follows:
     For more information on securing Liberty batch, refer to topic
     [Securing the Liberty batch
     environment](http://www.ibm.com/support/knowledgecenter/en/SS7K4U_liberty/com.ibm.websphere.wlp.zseries.doc/ae/twlp_batch_securing.html).
-```
+```xml
         <basicRegistry id="basic" realm="ibm/api">
            <user name="bob" password="bobpwd"/>
            <user name="jane" password="janepwd"/>
@@ -482,10 +482,10 @@ Using the batchManager utility to submit and monitor jobs
     resource. You should be able to see a script called **wlpenv**.
 
 4.  Run the following command:
-```
+```shell
         ./wlpenv batchManager submit --batchManager=<host>:<port>  --trustSslCertificates
          --user=bob --password=bobpwd --applicationName= MyFirstCicsJavaBatchWAR --jobXMLName=simpleBatchlet.xml --wait
-         ```
+```
 
     In the command above, --wait is used so the command will wait until the job completes. You should be able to see the following response.
 
@@ -496,17 +496,18 @@ Using the batchManager utility to submit and monitor jobs
         [2016/09/08 11:24:20.245 +0100] CWWKY0107I: JobExecution:{"jobName":"simpleBatchlet","executionId":2,"instanceId":2,"batchStatus":"COMPLETED","exitStatus":"COMPLETED","createTime":"2016/09/08 10:23:49.874 +0000","endTime":"2016/09/08 10:23:50.372 +0000","lastUpdatedTime":"2016/09/08 10:23:50.372 +0000","startTime":"2016/09/08 10:23:50.267 +0000","jobParameters":{},"restUrl":"https://winmvs2c.hursley.ibm.com:22808/ibm/api/batch","serverId":"localhost//u/evancho/demeter/workdir/IYK2ZLS3/BATCHEX1/wlp/usr/evandev","logpath":"/u/evancho/demeter/workdir/IYK2ZLS3/BATCHEX1/wlp/user/servers/evandev/logs/joblogs/simpleBatchlet/2016-09-08/instance.2/execution.2/","stepExecutions":[{"stepExecutionId":2,"stepName":"batchletStep","batchStatus":"COMPLETED","exitStatus":"COMPLETED","stepExecution":"https://winmvs2c.hursley.ibm.com:22806/ibm/api/batch/jobexecutions/2/stepexecutions/batchletStep"}]}
 ```
 5.  Run the following command to list existing jobs:
-```
+```shell
         ./wlpenv batchManager listJobs --batchManager=<host>:<port>  --trustSslCertificates
          --user=bob --password=bobpwd
 ```
 
-    You should see that two jobs completed, one was submitted by REST client, and the second one was submitted via batchManager utility.
+You should see that two jobs completed, one was submitted by REST client, and the second one was submitted via batchManager utility.
 
 ```
         [2016/09/08 11:28:26.345 +0100] CWWKY0106I: JobInstance:{"jobName":"simpleBatchlet","instanceId":2,"appName":"MyFirstCicsJavaBatchWAR#MyFirstCicsJavaBatchWAR.war","submitter":"bob","batchStatus":"COMPLETED","jobXMLName":"simpleBatchlet.xml","instanceState":"COMPLETED"}
         [2016/09/08 11:28:26.345 +0100] CWWKY0106I: JobInstance:{"jobName":"simpleBatchlet","instanceId":1,"appName":"MyFirstCicsJavaBatchWAR#MyFirstCicsJavaBatchWAR.war","submitter":"bob","batchStatus":"COMPLETED","jobXMLName":"simpleBatchlet.xml","instanceState":"COMPLETED"}
 ```
+
 6.  Send a GET request from your Firefox and you should see the same
     result.
 
@@ -585,6 +586,7 @@ Using the batchManager utility to submit and monitor jobs
         [9/8/16 10:23:50:384 GMT] com.ibm.jbatch.container.execution.impl.RuntimeWorkUnitExecu   getTopLevelNameInstanceExecutionInfo ENTRY
         [9/8/16 10:23:50:384 GMT] com.ibm.jbatch.container.execution.impl.RuntimeWorkUnitExecu   getTopLevelNameInstanceExecutionInfo RETURN TopLevelNameIntanceExecutionInfo:jobName=simpleBatchlet:instanceId=2:executionId=2
 ```
+
 Summary
 -------
 
