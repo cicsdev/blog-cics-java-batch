@@ -482,7 +482,7 @@ Using the batchManager utility to submit and monitor jobs
     resource. You should be able to see a script called **wlpenv**.
 
 4.  Run the following command:
-```
+```shell
         ./wlpenv batchManager submit --batchManager=<host>:<port>  --trustSslCertificates
          --user=bob --password=bobpwd --applicationName= MyFirstCicsJavaBatchWAR --jobXMLName=simpleBatchlet.xml --wait
          ```
@@ -496,17 +496,18 @@ Using the batchManager utility to submit and monitor jobs
         [2016/09/08 11:24:20.245 +0100] CWWKY0107I: JobExecution:{"jobName":"simpleBatchlet","executionId":2,"instanceId":2,"batchStatus":"COMPLETED","exitStatus":"COMPLETED","createTime":"2016/09/08 10:23:49.874 +0000","endTime":"2016/09/08 10:23:50.372 +0000","lastUpdatedTime":"2016/09/08 10:23:50.372 +0000","startTime":"2016/09/08 10:23:50.267 +0000","jobParameters":{},"restUrl":"https://winmvs2c.hursley.ibm.com:22808/ibm/api/batch","serverId":"localhost//u/evancho/demeter/workdir/IYK2ZLS3/BATCHEX1/wlp/usr/evandev","logpath":"/u/evancho/demeter/workdir/IYK2ZLS3/BATCHEX1/wlp/user/servers/evandev/logs/joblogs/simpleBatchlet/2016-09-08/instance.2/execution.2/","stepExecutions":[{"stepExecutionId":2,"stepName":"batchletStep","batchStatus":"COMPLETED","exitStatus":"COMPLETED","stepExecution":"https://winmvs2c.hursley.ibm.com:22806/ibm/api/batch/jobexecutions/2/stepexecutions/batchletStep"}]}
 ```
 5.  Run the following command to list existing jobs:
-```
+```shell
         ./wlpenv batchManager listJobs --batchManager=<host>:<port>  --trustSslCertificates
          --user=bob --password=bobpwd
 ```
 
-    You should see that two jobs completed, one was submitted by REST client, and the second one was submitted via batchManager utility.
+You should see that two jobs completed, one was submitted by REST client, and the second one was submitted via batchManager utility.
 
 ```
         [2016/09/08 11:28:26.345 +0100] CWWKY0106I: JobInstance:{"jobName":"simpleBatchlet","instanceId":2,"appName":"MyFirstCicsJavaBatchWAR#MyFirstCicsJavaBatchWAR.war","submitter":"bob","batchStatus":"COMPLETED","jobXMLName":"simpleBatchlet.xml","instanceState":"COMPLETED"}
         [2016/09/08 11:28:26.345 +0100] CWWKY0106I: JobInstance:{"jobName":"simpleBatchlet","instanceId":1,"appName":"MyFirstCicsJavaBatchWAR#MyFirstCicsJavaBatchWAR.war","submitter":"bob","batchStatus":"COMPLETED","jobXMLName":"simpleBatchlet.xml","instanceState":"COMPLETED"}
 ```
+
 6.  Send a GET request from your Firefox and you should see the same
     result.
 
@@ -585,6 +586,7 @@ Using the batchManager utility to submit and monitor jobs
         [9/8/16 10:23:50:384 GMT] com.ibm.jbatch.container.execution.impl.RuntimeWorkUnitExecu   getTopLevelNameInstanceExecutionInfo ENTRY
         [9/8/16 10:23:50:384 GMT] com.ibm.jbatch.container.execution.impl.RuntimeWorkUnitExecu   getTopLevelNameInstanceExecutionInfo RETURN TopLevelNameIntanceExecutionInfo:jobName=simpleBatchlet:instanceId=2:executionId=2
 ```
+
 Summary
 -------
 
